@@ -1,4 +1,4 @@
-# EcoTransformers
+# 🌿 EcoTransformer
 
 We propose a new Transformer architecture "EcoTransformer", replacing dot-product attention with a convolutional mechanism using Laplacian kernels, the L1 metric between queries and keys, eliminating costly matrix multiplication operations. 
 
@@ -6,10 +6,19 @@ The typical scaled dot-product attention mechanism used throughout contemporary 
 
 ## Structure
 
-The core library is contained in l1_distance.py, containing the main functionality and any necessary helper functions. We tested our architecture against the typical eager_attention_forward used in GPT2, so classes inheriting from GPT2 have been provided to demonstrate how EcoTransformer's L1 attention can replace dot-product attention at minimal cost.
+``l1_distance.py`` contains the main functionality and required helper functions to use our EcoTransformer as a library. 
 
-## Setup
-Run the following commands in a bash terminal:
+As we in part tested our architecture against the typical eager_attention_forward used in GPT2, classes inheriting from GPT2 have been provided, to demonstrate how EcoTransformer's L1 attention can replace dot-product attention at minimal cost.
+
+``EcoTransformer_GPT2_Demo.ipynb`` contains a training/testing framework that can demonstrate EcoTransformer's performance on the StoryCloze dataset.
+
+## Setup and Testing
+
+To test the performance of EcoTransformer:
+1. Upload ``EcoTransformer_GPT2_Demo.ipynb`` to Google Colab (recommended).
+2. Follow the setup steps in the provided notebook, and click "Run All" with the A100 GPU for best performance, or T4 GPU if the former is unavailable. 
+
+To use this library as the core of a repo, run the following commands in a bash terminal:
 ```
 git clone https://github.com/xingmingxu/EcoTransformer_Temp.git
 cd EcoTransformer_Temp
@@ -27,9 +36,7 @@ Install the requirements.
 pip install requirements.txt
 ```
 
-## Run
-
-It is best to run these tests on a device with access to a GPU. A .ipynb file is provided that can be run 
+This will provide you with a clean repo with l1_distance.py as a core library to build off of. 
 
 ## Datasets
 
@@ -43,3 +50,7 @@ Our EcoTransformer performs on-par with, or even surpassing scaled dot-product a
 
 ![alt text](images/table1.png)
 ![alt text](images/table2.png)
+
+## Credits
+
+We used HuggingFace's [transformers](https://github.com/huggingface/transformers) library to develop and test EcoTransformer.

@@ -303,7 +303,7 @@ class L1GPT2LMHeadModel(GPT2PreTrainedModel, GenerationMixin):
         self.lm_head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
 
 
-class CustomGPT2ForSequenceClassification(GPT2ForSequenceClassification):
+class L1GPT2ForSequenceClassification(GPT2ForSequenceClassification):
     def __init__(self, config):
         super().__init__(config)
         self.transformer = L1GPT2Model(config)
