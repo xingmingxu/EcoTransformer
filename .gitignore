@@ -1,0 +1,84 @@
+# Ignore any .archive or .reference
+*.archive
+*.reference
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore editor-specific files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore node modules
+node_modules/
+
+# Ignore build and distribution directories
+/dist/
+/build/
+/out/
+/target/
+
+# Ignore dependency directories
+/bower_components/
+/.pnp
+.pnp.js
+
+# Ignore log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.venv
+
+# Ignore debug files
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore coverage directories
+/coverage/
+.nyc_output/
+
+# Ignore cache directories
+.cache/
+.temp/
+.tmp/
+
+# Ignore package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore compiled files
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+__pycache__/
+
+# Ignore documentation files
+/docs/
+/doc/
+/site/
+
+# Ignore temporary files
+*.tmp
+*.bak
