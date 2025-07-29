@@ -26,7 +26,11 @@ from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS, PreTrainedModel
 from transformers.pytorch_utils import Conv1D
 from transformers.utils import logging
 
+# Library functions
+
 MAX_LENGTH=128
+
+logger = logging.get_logger(__name__)
 
 
 def generate_tensor_c(A, B):
@@ -42,14 +46,6 @@ def generate_tensor_c(A, B):
   """
   # Get dimensions of A and B
   i_dim, j_dim, k_dim, d_dim = A.shape
-
-
-  # Ensure the compatible dimensions match
-
-  # Initialize tensor C with zeros
-  #
-
-
   difference = torch.abs(A.unsqueeze(3) - B.unsqueeze(2)) # Unsqueeze adds a dimension
 
   # Sum over the last dimension (d)
@@ -74,14 +70,18 @@ def generate_tensor_c_batch(A, B, batch_size=8):
 
   return result
 
+L1_LAMBDA=-1
 
-def L1_eager_attention_forward(module, query, key, value, attention_mask, head_mask=None, **kwargs):
+def L1_eager_attention_forward(module, query, key, value, attention_mask, lambd=-L1_LAMBDA, head_mask=None, **kwargs):
 
     """
-    Performs forward for eager attention using L1 normalization.
+    Performs forward for eager attention using L1 normalization. 
+    
+    Args:
+    * lambd: tuning parameter lambda
     """
 
-    attn_weights = generate_tensor_c_batch(query, key) * (-1)
+    attn_weights = generate_tensor_c_batch(query, key) * (lambd)
     #attn_weights = torch.matmul(query, key.transpose(-1, -2))
 
     if module.scale_attn_weights:
@@ -168,10 +168,10 @@ class L1GPT2Attention(GPT2Attention):
         self.layer_idx = layer_idx
         self.reorder_and_upcast_attn = config.reorder_and_upcast_attn
 
-        
+
         self.c_attn = Conv1D(3 * self.embed_dim, self.embed_dim) # mapping for the key, value, and l matrix (utility matrix)
         self.q_attn = Conv1D(self.embed_dim, self.embed_dim) # mapping for the query matrix
-        
+
         self.c_proj = Conv1D(self.embed_dim, self.embed_dim)
 
         self.attn_dropout = nn.Dropout(config.attn_pdrop)
@@ -213,8 +213,6 @@ class L1GPT2Attention(GPT2Attention):
 
         query_states = query_states.view(shape_q).transpose(1, 2)
         key_states = key_states.view(shape_kv).transpose(1, 2)
-        if self.method != "L1":
-            utility_states = utility_states.view(shape_kv).transpose(1,2)
         value_states = value_states.view(shape_kv).transpose(1, 2)
 
         if past_key_value is not None:
@@ -231,7 +229,7 @@ class L1GPT2Attention(GPT2Attention):
         is_causal = attention_mask is None and query_states.shape[-2] > 1 and not is_cross_attention
 
         using_eager = self.config._attn_implementation == "eager"
-        
+
         # Define the new attention_interface as the custom L1_eager_attention_forward
         attention_interface: Callable = L1_eager_attention_forward
 
@@ -276,8 +274,8 @@ class L1GPT2Attention(GPT2Attention):
         attn_output = self.resid_dropout(attn_output)
 
         return attn_output, attn_weights
-    
-    
+
+
 # Create L1 "clones" inheriting from GPT2 equivalents to patch in our changes to the forward function.
 
 class L1GPT2Block(GPT2Block):
@@ -286,7 +284,7 @@ class L1GPT2Block(GPT2Block):
         super().__init__(config, layer_idx=layer_idx)
         self.attn = L1GPT2Attention(config,
                                         layer_idx=layer_idx)
-        
+
 class L1GPT2Model(GPT2Model):
 
     def __init__(self, config):

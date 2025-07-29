@@ -1,8 +1,10 @@
 # 🌿 EcoTransformer
 
-We propose a new Transformer architecture "EcoTransformer", replacing dot-product attention with a convolutional mechanism using Laplacian kernels, the L1 metric between queries and keys, eliminating costly matrix multiplication operations. 
+We propose a new Transformer architecture "**EcoTransformer**", in which the output context vector is constructed as the convolution of the values using a Laplacian kernel, where the distances are measured by the *L1 metric* between the queries and keys. Our architecture eliminates costly matrix multiplication operations for attention scores, paving the way for a **less energy-intensive** Transformer. 
 
-The typical scaled dot-product attention mechanism used throughout contemporary AI is computationally expensive and consumes a significant  amount of energy. Our new attention score calculation is lightweight and efficient: it removes resource-hungry multiplications, while performing on par with, or even surpassing scaled dot-product attention in NLP, bioinformatics, and vision tasks. 
+The typical scaled dot-product attention mechanism used throughout contemporary AI is computationally expensive and consumes a significant  amount of energy. Our new attention score calculation is **lightweight** and **efficient**: it removes resource-hungry multiplications, while performing on par with, or even surpassing scaled dot-product attention in NLP, bioinformatics, and vision tasks. 
+
+Check out our paper [here](https://arxiv.org/pdf/2507.20096)!!
 
 ## Structure
 
