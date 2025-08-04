@@ -72,7 +72,7 @@ def generate_tensor_c_batch(A, B, batch_size=8):
 
 L1_LAMBDA=-1
 
-def L1_eager_attention_forward(module, query, key, value, attention_mask, lambd=-L1_LAMBDA, head_mask=None, **kwargs):
+def L1_eager_attention_forward(module, query, key, value, attention_mask, lambd=L1_LAMBDA, head_mask=None, **kwargs):
 
     """
     Performs forward for eager attention using L1 normalization. 
